@@ -1,0 +1,75 @@
+.error-message {
+  color: red;
+}
+
+button {
+  margin: 10px 0;
+}
+.button-container{
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+}
+
+.container{
+  margin-top: 100px;
+}
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+  .title-container{
+    text-align: center;
+    justify-content: center;
+    display: flex;
+  }
+}
+
+.github-icon{
+  margin-right: 8px;
+}
+.connected-icon {
+  color: green;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.sync-details{
+  padding-bottom: 8px;
+  padding-top: 8px;
+  .last-synced {
+    margin-left: 16px;
+    margin-right: 16px;
+    font-size: 0.9em;
+    color: gray;
+  }
+  .sync-type{
+    margin-left: 16px;
+    margin-right: 16px;
+    font-size: 0.9em;
+    color: gray;
+    text-align: right;
+  }
+}
+
+.panel-content {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  padding-top: 16px;
+
+  p {
+    margin: 0;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+}
