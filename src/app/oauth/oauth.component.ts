@@ -7,7 +7,8 @@ import { ActivatedRoute } from '@angular/router';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router'; // Import Router
+import { Router } from '@angular/router';
+import {RepositoriesComponent} from '../repositories/repositories.component';
 
 @Component({
   selector: 'app-oauth',
@@ -15,13 +16,18 @@ import { Router } from '@angular/router'; // Import Router
   standalone: true,
   styleUrls: ['./oauth.component.scss'],
   imports: [
-    MatButtonModule, MatIconModule, CommonModule, MatExpansionModule],  // Add CommonModule here
+    RepositoriesComponent,
+    MatButtonModule,
+    MatIconModule,
+    CommonModule,
+    MatExpansionModule
+  ],  // Add CommonModule here
 })
 export class OAuthComponent implements OnInit {
   isConnected: boolean = false;
   connectedUser: GitHubUser | null = null;
   errorMessage: string = '';
-  lastSyncedDate: string = '2023-10-07 15:11 PM'; // Example date
+  lastSyncedDate: string = ''; // Example date
   syncType: string = 'full'; // Sync type (example)
 
   constructor(
@@ -58,6 +64,7 @@ export class OAuthComponent implements OnInit {
           this.errorMessage = error;
         }
       });
+
     }
 
   }

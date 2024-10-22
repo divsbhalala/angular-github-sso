@@ -28,11 +28,17 @@
 
   <!-- Expanded Content: Sync Type, Remove Button -->
   <div class="panel-content">
-    <button mat-raised-button color="primary" (click)="disconnect()">
-      Remove <mat-icon>delete</mat-icon>
-    </button>
+    <div class="remove-button-container">
+      <button mat-raised-button color="primary" (click)="disconnect()">
+        Remove <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <app-repositories></app-repositories>
+
+
   </div>
 </mat-expansion-panel>
+
 <div *ngIf="errorMessage" class="error-message">
   <p>{{ errorMessage }}</p>
 </div>

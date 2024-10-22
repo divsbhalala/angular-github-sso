@@ -55,10 +55,13 @@ button {
 }
 
 .panel-content {
-  display: flex;
-  justify-content: end;
-  align-items: center;
   padding-top: 16px;
+
+  .remove-button-container{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+  }
 
   p {
     margin: 0;

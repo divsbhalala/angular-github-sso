@@ -1,0 +1,32 @@
+
+
+<div class="loader" *ngIf="isLoadingOrgs">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div class="no-org-msg"  *ngIf="organizations.length <= 0 && !isLoadingOrgs;">
+  Tou haven't authorized any organizations
+</div>
+<ag-grid-angular
+  class="ag-theme-quartz"
+  [rowData]="organizations"
+  [columnDefs]="columnDefs"
+  rowSelection="multiple"
+  (selectionChanged)="selectionChanged($event)"
+  [loading]="isLoadingOrgs"
+  (gridReady)="onGridReadyRepos($event)"
+  style="width: 100%; height: 400px;">
+</ag-grid-angular>
+
+<div style="margin-top: 16px;" *ngIf="selectedRepo.length;">
+  <ag-grid-angular
+    class="ag-theme-quartz"
+    [rowData]="userStats"
+    [columnDefs]="stateColumnDefs"
+    [loading]="isLoadingStats"
+    (gridReady)="onGridReadyStats($event)"
+    style="width: 100%; height: 400px;"
+  >
+  </ag-grid-angular>
+
+</div>
