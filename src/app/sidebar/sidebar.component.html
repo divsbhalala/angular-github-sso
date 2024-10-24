@@ -1,0 +1,88 @@
+
+<div class="btn-open-close" [style.left]="leftPositionButton">
+  <button mat-mini-fab class="" (click)="onToggleSidebar()" #dButton>
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</div>
+
+<mat-sidenav-container class="sidenav-container" autosize>
+  <!-- Sidebar -->
+
+  <mat-sidenav mode="side" [opened]="isExpanded" [class.sidenav]="isExpanded" fixedInViewport="true" #drawer (openedStart)="openedStart($event)" (closedStart)="closedStart($event)" (positionChanged)="onPositionChanged()">
+    <!-- <div class="sidebar-collapse-button">
+    </div> -->
+    <div class="sidebar-content">
+      <div class="sidebar-header">
+        <div class="project-details">
+          <h3>Github SSO DEMO</h3>
+          <span>Software project</span>
+        </div>
+      </div>
+
+      <!-- Section: Planning -->
+      <div class="sidebar-section">
+        <h4>PLANNING</h4>
+        <mat-nav-list>
+          <a mat-list-item [routerLink]="['/repositories']">
+            <mat-icon>folder</mat-icon> Repositories
+          </a>
+          <a mat-list-item [routerLink]="['/oauth']">
+            <mat-icon>lock_open</mat-icon> OAuth Callback
+          </a>
+          <a mat-list-item [routerLink]="['/stats']">
+            <mat-icon>bar_chart</mat-icon> Stats
+          </a>
+          <!-- Add other navigation links here -->
+        </mat-nav-list>
+      </div>
+
+      <!-- Section: Development -->
+      <div class="sidebar-section">
+        <h4>DEVELOPMENT</h4>
+        <mat-nav-list>
+          <a mat-list-item>
+            <mat-icon>settings</mat-icon>
+            <span>Components</span>
+          </a>
+          <a mat-list-item>
+            <mat-icon>lock</mat-icon>
+            <span>Security</span>
+          </a>
+          <a mat-list-item>
+            <mat-icon>update</mat-icon>
+            <span>Releases</span>
+          </a>
+        </mat-nav-list>
+      </div>
+
+      <!-- Section: Operations -->
+      <div class="sidebar-section">
+        <h4>OPERATIONS</h4>
+        <mat-nav-list>
+          <a mat-list-item>
+            <mat-icon>cloud_upload</mat-icon>
+            <span>Deployments</span>
+          </a>
+          <a mat-list-item>
+            <mat-icon>assignment</mat-icon>
+            <span>Project Pages</span>
+          </a>
+        </mat-nav-list>
+      </div>
+
+      <!-- Footer -->
+      <div class="sidebar-footer">
+        <p>You're in a company-managed project</p>
+        <a href="#">Learn more</a>
+      </div>
+    </div>
+
+  </mat-sidenav>
+
+  <!-- Main content area -->
+  <mat-sidenav-content>
+    <div class="content-container">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
