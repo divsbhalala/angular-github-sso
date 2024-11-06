@@ -21,12 +21,19 @@
 <div style="margin-top: 16px;" *ngIf="selectedRepo.length;">
   <ag-grid-angular
     class="ag-theme-quartz"
-    [rowData]="userStats"
+    [rowData]="displayedUserStats"
     [columnDefs]="stateColumnDefs"
     [loading]="isLoadingStats"
     (gridReady)="onGridReadyStats($event)"
     style="width: 100%; height: 400px;"
   >
   </ag-grid-angular>
+  <!-- Pagination -->
+  <mat-paginator
+    [length]="userStats.length"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)">
+  </mat-paginator>
 
 </div>

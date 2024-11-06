@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { GitHubService } from '../services/github.service';
 import {AgGridAngular} from 'ag-grid-angular';
 import {ColDef, GridApi} from 'ag-grid-community';
@@ -6,6 +6,7 @@ import {NgIf} from '@angular/common';  // Import ColDef for type checking
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {MatButton} from '@angular/material/button';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-repositories',
@@ -16,12 +17,24 @@ import {MatButton} from '@angular/material/button';
     NgIf,
     MatProgressSpinner,
     MatButton,
+    MatPaginator,
   ],
   styleUrls: ['./repositories.component.scss']
 })
 export class RepositoriesComponent implements OnInit {
   organizations = [];
   selectedRepo: string[] = []
+
+  // Pagination settings
+  pageSize: number = 10; // Default items per page
+  totalItems: number = 0;
+  currentPage: number = 0;
+  displayedUserStats: any[] = []; // Displayed data for the current page
+
+  displayedColumns: string[] = ['user', 'commits', 'pullRequests', 'issues'];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   // Define the columns with ColDef type
   columnDefs: ColDef[] = [
     { headerName: 'Id', field: 'id', flex: 1 },  // No checkbox
@@ -37,7 +50,8 @@ export class RepositoriesComponent implements OnInit {
     { headerName: 'User', field: 'user', flex: 1},
     { headerName: 'Total Commits', field: 'totalCommits', flex: 1 },
     { headerName: 'Total Pull Requests', field: 'totalPRs', flex: 1 },
-    { headerName: 'Total Issues', field: 'totalIssues', flex: 1 }
+    { headerName: 'Total Issues', field: 'totalIssues', flex: 1 },
+    { headerName: 'Issues Changelogs', field: 'changelogs', flex: 1 }
   ];
 
   // Loading states for both grids
@@ -79,6 +93,20 @@ export class RepositoriesComponent implements OnInit {
     this.isLoadingOrgs = true;
 
   }
+  // Called when page changes in the paginator
+  onPageChange(event: PageEvent): void {
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.updateDisplayedUserStats();
+  }
+
+  // Update the displayedUserStats based on pagination settings
+  updateDisplayedUserStats(): void {
+    const startIndex = this.currentPage * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.displayedUserStats = this.userStats.slice(startIndex, endIndex);
+  }
+
 
 
 
@@ -105,6 +133,8 @@ export class RepositoriesComponent implements OnInit {
           next: data => {
             this.isLoadingStats = false; // Hide loader for stats grid
             this.userStats = data;
+            this.totalItems = this.userStats.length; // Set the total item count for pagination
+            this.updateDisplayedUserStats(); // Update displayed data for the first page
           },
           error: (error) => {
             this.isLoadingStats = false; // Hide loader for stats grid

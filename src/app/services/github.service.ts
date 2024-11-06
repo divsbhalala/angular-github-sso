@@ -71,6 +71,12 @@ export class GitHubService {
       .pipe(catchError(this.handleError));
   }
 
+  // Method to get issue changelogs for a repository
+  getIssueChangelogs(owner: string, repo: string): Observable<any> {
+    const url = `${this.apiUrl}/repo-data/${owner}/${repo}/issues/changelog`;
+    return this.http.get<any>(url);
+  }
+
   // Error handling
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'An unknown error occurred!';
