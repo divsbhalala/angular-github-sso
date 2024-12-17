@@ -1,18 +1,21 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { GitHubUser } from '../models/github.model';
 import { environment } from '../../environments/environment'; // Import the environment
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GitHubService {
   private apiUrl = environment?.apiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   // Get JWT token from localStorage
   getToken(): string | null {
@@ -23,7 +26,7 @@ export class GitHubService {
   private setHeaders(): HttpHeaders {
     const token = this.getToken();
     return new HttpHeaders({
-      'Authorization': `Bearer ${token}`  // Send token as Bearer token
+      Authorization: `Bearer ${token}`, // Send token as Bearer token
     });
   }
 
@@ -35,7 +38,8 @@ export class GitHubService {
   // Get connection status
   getConnectionStatus(): Observable<GitHubUser> {
     const headers = this.setHeaders();
-    return this.http.get<GitHubUser>(`${this.apiUrl}/status`, {headers})
+    return this.http
+      .get<GitHubUser>(`${this.apiUrl}/status`, { headers })
       .pipe(catchError(this.handleError));
   }
 
@@ -52,6 +56,24 @@ export class GitHubService {
     return this.http.post(`${this.apiUrl}/orgs-stats`, { orgIds }, { headers });
   }
 
+  getOrgCommitStats(orgIds: string[], page: number = 1, pageSize: number = 10, search: string): Observable<any> {
+    const headers = this.setHeaders();
+
+    return this.http.get(`${this.apiUrl}/commit?orgIds=${orgIds}&page=${page}&pageSize=${pageSize}&search=${search}`, { headers });
+  }
+  
+  getOrgIssuesStats(orgIds: string[], page: number = 1, pageSize: number = 10, search: string): Observable<any> {
+    const headers = this.setHeaders();
+
+    return this.http.get(`${this.apiUrl}/issue?orgIds=${orgIds}&page=${page}&pageSize=${pageSize}&search=${search}`, { headers });
+  }
+
+  getOrgPullRequestStats(orgIds: string[], page: number = 1, pageSize: number = 10, search: string): Observable<any> {
+    const headers = this.setHeaders();
+
+    return this.http.get(`${this.apiUrl}/pull-request?orgIds=${orgIds}&page=${page}&pageSize=${pageSize}&search=${search}`, { headers });
+  }
+
   // Fetch repos for an organization
   getRepos(org: string): Observable<any> {
     const headers = this.setHeaders();
@@ -61,13 +83,16 @@ export class GitHubService {
   // Fetch repo data (commits, PRs, issues)
   getRepoData(owner: string, repo: string): Observable<any> {
     const headers = this.setHeaders();
-    return this.http.get(`${this.apiUrl}/repo-data/${owner}/${repo}`, { headers });
+    return this.http.get(`${this.apiUrl}/repo-data/${owner}/${repo}`, {
+      headers,
+    });
   }
 
   // Remove GitHub integration
   disconnect(): Observable<any> {
     const headers = this.setHeaders();
-    return this.http.delete(`${this.apiUrl}/disconnect`, { headers})
+    return this.http
+      .delete(`${this.apiUrl}/disconnect`, { headers })
       .pipe(catchError(this.handleError));
   }
 

@@ -10,6 +10,6 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),
-    importProvidersFrom(CommonModule, HttpClientModule)  // Use importProvidersFrom for CommonModule and HttpClientModule
+    importProvidersFrom(CommonModule, HttpClientModule), provideAnimationsAsync()  // Use importProvidersFrom for CommonModule and HttpClientModule
   ]
 };

@@ -71,6 +71,7 @@ export class OAuthComponent implements OnInit {
 
   // Trigger GitHub OAuth process
   connect(): void {
+    console.log('call')
     this.githubService.connect();
   }
 

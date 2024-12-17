@@ -1,13 +1,47 @@
-
-
 <div class="loader" *ngIf="isLoadingOrgs">
   <mat-spinner></mat-spinner>
 </div>
 
-<div class="no-org-msg"  *ngIf="organizations.length <= 0 && !isLoadingOrgs;">
-  Tou haven't authorized any organizations
+<div class="no-org-msg" *ngIf="organizations.length <= 0 && !isLoadingOrgs">
+  You haven't authorized any organizations
 </div>
-<ag-grid-angular
+<div class="container">
+  <div>
+    <mat-form-field class="select" appearance="outline">
+      <mat-label>Active Integration</mat-label>
+      <mat-select
+        [value]="selectedOrganization"
+        (selectionChange)="selectionChanged($event)"
+      >
+        @for (organization of organizations; track $index) {
+        <mat-option [value]="organization.login">{{
+          organization?.login
+        }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="select" appearance="outline">
+      <mat-label>Entity</mat-label>
+      <mat-select
+        [value]="selectedEntity"
+        [disabled]="!selectedOrganization"
+        (selectionChange)="onEntityChange($event)"
+      >
+        <mat-option value="commits">Commits</mat-option>
+        <mat-option value="pull-requests">Pull Requests</mat-option>
+        <mat-option value="issues">Issues</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Search</mat-label>
+      <input matInput placeholder="Search" [formControl]="search"/>
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+</div>
+<!-- <ag-grid-angular
   class="ag-theme-quartz"
   [rowData]="organizations"
   [columnDefs]="columnDefs"
@@ -15,25 +49,39 @@
   (selectionChanged)="selectionChanged($event)"
   [loading]="isLoadingOrgs"
   (gridReady)="onGridReadyRepos($event)"
-  style="width: 100%; height: 400px;">
-</ag-grid-angular>
+  style="width: 100%; height: 400px"
+>
+</ag-grid-angular> -->
 
-<div style="margin-top: 16px;" *ngIf="selectedRepo.length;">
-  <ag-grid-angular
-    class="ag-theme-quartz"
-    [rowData]="displayedUserStats"
-    [columnDefs]="stateColumnDefs"
+@if (selectedOrganization) {
+<div style="margin-top: 16px">
+  @if (selectedEntity === 'commits') {
+  <app-org-activity
+    [rows]="commits"
+    [columns]="commitsDefs"
     [loading]="isLoadingStats"
-    (gridReady)="onGridReadyStats($event)"
-    style="width: 100%; height: 400px;"
-  >
-  </ag-grid-angular>
-  <!-- Pagination -->
-  <mat-paginator
-    [length]="userStats.length"
-    [pageSize]="pageSize"
-    [pageSizeOptions]="[5, 10, 20]"
-    (page)="onPageChange($event)">
-  </mat-paginator>
-
+    (onGridReady)="onGridReadyStats($event)"
+    (onPageChange)="onPageChange($event)"
+    [length]="totalItems"
+  />
+  } @else if (selectedEntity === 'pull-requests') {
+  <app-org-activity
+    [rows]="prs"
+    [columns]="prDefs"
+    [loading]="isLoadingStats"
+    (onGridReady)="onGridReadyStats($event)"
+    (onPageChange)="onPageChange($event)"
+    [length]="totalItems"
+  />
+  } @else if (selectedEntity === 'issues') {
+  <app-org-activity
+    [rows]="issues"
+    [columns]="issueDefs"
+    [loading]="isLoadingStats"
+    (onGridReady)="onGridReadyStats($event)"
+    (onPageChange)="onPageChange($event)"
+    [length]="totalItems"
+  />
+  }
 </div>
+}
